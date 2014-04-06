@@ -8,8 +8,8 @@ module Anki
     end
 
     def generate_deck
-      raise ArgumentError, "You need card data." if self.card_data.nil? || self.card_data.empty?
-      raise ArgumentError, "card_data should be an array of hashes" unless self.card_data.is_a?(Array)
+      raise ArgumentError, "card_data should be an array of hashes" if !self.card_data.is_a?(Array)
+      raise ArgumentError, "You need card data." if self.card_data.empty?
 
       self.card_data.map { |card| "#{card.keys.first};#{card.values.first}" }.compact.join("\n")
     end
