@@ -25,17 +25,22 @@ Alternatively, you can pass an optional `file` option when generating the deck t
 ```ruby
 require 'anki'
 
-cards = [{ "Front of the card" => "Back of the card" }, { "Another card" => "Another answer" }]
+cards = [
+          { "Front of the card" => "Back of the card" },
+          { "Another card" => "Another answer" }
+        ]
 
 deck = Anki::Deck.new(card_data: cards)
 
-# Alternatively, you can pass in the array of hashes for card data after initializing the object:
-# deck.card_data = cards
+# Alternatively, you can pass in the array of hashes for card data
+# after initializing the object:
+deck.card_data = cards
 
 deck.generate_deck
   # => "Front of the card;Back of the card\nAnother card;Another answer"
 
-# If you want to save it into a file directly, you can pass an optional `file` option with the path where you want to save the file:
+# If you want to save it into a file directly, you can pass an optional `file` option
+# with the path where you want to save the file:
 deck.generate_deck(file: "/tmp/anki_deck.txt")
 ```
 
