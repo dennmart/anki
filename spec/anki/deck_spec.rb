@@ -31,5 +31,13 @@ describe Anki::Deck do
       subject.generate_deck(file: "/tmp/anki_deck.txt")
       File.exists?("/tmp/anki_deck.txt").should be_true
     end
+
+    it "returns a string including tags if the value of each card data is a hash" do
+      subject.card_data = [{ "a" => { "value" => "b", "tags" => ["level1"] } },
+                           { "c" => { "value" => "d", "tags" => ["level1", "level2"] } }]
+
+      subject.generate_deck.should match /a;b;level1/
+      subject.generate_deck.should match /c;d;level1 level2/
+    end
   end
 end

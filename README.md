@@ -18,9 +18,9 @@ Or install it yourself as:
 
 ## Usage
 
-After requiring the anki gem, simply create a new instance of `Anki::Deck`, pass in an array of hashes (either including the `card_data` option when creating the `Anki::Deck` object, or using the `Anki::Deck#card_data` method), and generate the deck by using the `Anki::Deck#generate_deck` method. It will return a string that is formatted to be ready to be saved into a file for importing into Anki.
+### Generating a string for cards
 
-Alternatively, you can pass an optional `file` option when generating the deck to save the string into a file directly.
+After requiring the anki gem, simply create a new instance of `Anki::Deck`, pass in an array of hashes (either including the `card_data` option when creating the `Anki::Deck` object, or using the `Anki::Deck#card_data` method), and generate the deck by using the `Anki::Deck#generate_deck` method. It will return a string that is formatted to be ready to be saved into a file for importing into Anki.
 
 ```ruby
 require 'anki'
@@ -38,10 +38,40 @@ deck.card_data = cards
 
 deck.generate_deck
   # => "Front of the card;Back of the card\nAnother card;Another answer"
+```
 
+### Generating a file
+
+Alternatively, you can pass an optional `file` option when generating the deck to save the string into a file directly.
+
+```ruby
+require 'anki'
+
+cards = [
+          { "Front of the card" => "Back of the card" },
+          { "Another card" => "Another answer" }
+        ]
+
+deck = Anki::Deck.new(card_data: cards)
 # If you want to save it into a file directly, you can pass an optional `file` option
 # with the path where you want to save the file:
 deck.generate_deck(file: "/tmp/anki_deck.txt")
+```
+
+### Including card tags
+
+If you want to include tags with the generated Anki deck, the value of the card data can be a hash that includes an array of strings.
+
+```ruby
+require 'anki'
+
+card = [
+         { "Front" => { "value" => "Back", "tags" => ["tag1, tag2"]} }
+       ]
+
+deck = Anki::Deck.new(card_data: card)
+deck.generate_deck
+  # => "Front;Back;tag1 tag2"
 ```
 
 ## Contributing
