@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe Anki::Deck do
+RSpec.describe Anki::Deck do
   describe "#generate_deck" do
     subject { Anki::Deck.new }
     let(:cards) { [{ "a" => "b" }, { "c" => "d" }] }
@@ -23,21 +23,21 @@ describe Anki::Deck do
 
     it "returns a string with the card_data hashes, separating key and value with a semicolon and adding line breaks" do
       subject.card_data = cards
-      subject.generate_deck.should == "a;b\nc;d"
+      expect(subject.generate_deck).to eq("a;b\nc;d")
     end
 
     it "saves to a file if the file option is passed" do
       subject.card_data = cards
       subject.generate_deck(file: "/tmp/anki_deck.txt")
-      File.exists?("/tmp/anki_deck.txt").should be_true
+      expect(File.exist?("/tmp/anki_deck.txt")).to be_truthy
     end
 
     it "returns a string including tags if the value of each card data is a hash" do
       subject.card_data = [{ "a" => { "value" => "b", "tags" => ["level1"] } },
                            { "c" => { "value" => "d", "tags" => ["level1", "level2"] } }]
 
-      subject.generate_deck.should match /a;b;level1/
-      subject.generate_deck.should match /c;d;level1 level2/
+      expect(subject.generate_deck).to match /a;b;level1/
+      expect(subject.generate_deck).to match /c;d;level1 level2/
     end
   end
 end
