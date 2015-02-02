@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.0.3 (February 2, 2015)
+* Card headers must to be set up when generating the deck.
+
 ## 0.0.2 (April 20, 2014)
 * Card data can now include tags for importing into Anki.
 
