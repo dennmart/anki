@@ -20,7 +20,7 @@ Or install it yourself as:
 
 ### Generating a string for cards
 
-After requiring the anki gem, create a new instance of `Anki::Deck`, pass in the headers (as an array of strings) and the card data (as an array of hashes), and generate the deck by using the `Anki::Deck#generate_deck` method. The generated deck is a string in the Anki separator format ready to be saved into a file for importing into Anki. 
+After requiring the anki gem, create a new instance of `Anki::Deck`, pass in the headers (as an array of strings) and the card data (as an array of hashes), and generate the deck by using the `Anki::Deck#generate_deck` method. The generated deck is a string in the Anki separator format ready to be saved into a file for importing into Anki.
 
 The Anki::Deck can be created either by including the `card_headers` and `card_data` option when creating the `Anki::Deck` object, or by using the `Anki::Deck#card_heaers` and `Anki::Deck#card_data` methods.
 
@@ -44,7 +44,7 @@ deck.card_headers = headers
 deck.card_data = cards
 
 deck.generate_deck
-  # => "Front of the card;Back of the card\nAnother card;Another answer"
+  # => "#front;back\nFront of the card;Back of the card\nAnother card;Another answer"
 ```
 
 ### Generating a file
@@ -68,9 +68,9 @@ cards = [
           { "front" => "Front of the card", "back" => "Back of the card", "Tags" => "one_tag" },
           { "front" => "Another card", "back" => "Another answer", "Tags" => "multiple tags are separated by spaces" }
         ]
-deck = Anki::Deck.new(card_headers: headers, card_data: card)
+deck = Anki::Deck.new(card_headers: headers, card_data: cards)
 deck.generate_deck
-  # => "Front of the card;Back of the card;one_tag\nAnother card;Another answer;multiple tags are separated by spaces"
+  # => "#front;back;Tags\nFront of the card;Back of the card;one_tag\nAnother card;Another answer;multiple tags are separated by spaces"
 ```
 
 ## Contributing
