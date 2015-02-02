@@ -20,20 +20,27 @@ Or install it yourself as:
 
 ### Generating a string for cards
 
-After requiring the anki gem, simply create a new instance of `Anki::Deck`, pass in an array of hashes (either including the `card_data` option when creating the `Anki::Deck` object, or using the `Anki::Deck#card_data` method), and generate the deck by using the `Anki::Deck#generate_deck` method. It will return a string that is formatted to be ready to be saved into a file for importing into Anki.
+After requiring the anki gem, create a new instance of `Anki::Deck`, pass in the headers (as an array of strings) and the card data (as an array of hashes), and generate the deck by using the `Anki::Deck#generate_deck` method. The generated deck is a string in the Anki separator format ready to be saved into a file for importing into Anki. 
+
+The Anki::Deck can be created either by including the `card_headers` and `card_data` option when creating the `Anki::Deck` object, or by using the `Anki::Deck#card_heaers` and `Anki::Deck#card_data` methods.
+
+The card data can contain any keys and values. When the Anki::Deck is generated only the keys that match the card headers will be used as output, this may result in a completely empty card so make sure you check your headers and card data appropriately.
+
 
 ```ruby
 require 'anki'
 
+headers = [ "front", "back" ]
 cards = [
-          { "Front of the card" => "Back of the card" },
-          { "Another card" => "Another answer" }
+          { "front" => "Front of the card", "back" => "Back of the card" },
+          { "front" => "Another card", "back" => "Another answer", "unused header" => "This will be ignored and not be in the deck" }
         ]
 
-deck = Anki::Deck.new(card_data: cards)
+deck = Anki::Deck.new(card_headers: headers, card_data: cards)
 
 # Alternatively, you can pass in the array of hashes for card data
 # after initializing the object:
+deck.card_headers = headers
 deck.card_data = cards
 
 deck.generate_deck
@@ -45,33 +52,25 @@ deck.generate_deck
 Alternatively, you can pass an optional `file` option when generating the deck to save the string into a file directly.
 
 ```ruby
-require 'anki'
-
-cards = [
-          { "Front of the card" => "Back of the card" },
-          { "Another card" => "Another answer" }
-        ]
-
-deck = Anki::Deck.new(card_data: cards)
 # If you want to save it into a file directly, you can pass an optional `file` option
 # with the path where you want to save the file:
 deck.generate_deck(file: "/tmp/anki_deck.txt")
 ```
 
 ### Including card tags
-
-If you want to include tags with the generated Anki deck, the value of the card data can be a hash that includes an array of strings.
+Tags are nothing special. Any field can be used as the Tag. When you are importing to Anki set the Field mapping to "Map to Tags" by clicking on the Change button for the field that contains your tags.
 
 ```ruby
 require 'anki'
 
-card = [
-         { "Front" => { "value" => "Back", "tags" => ["tag1, tag2"]} }
-       ]
-
-deck = Anki::Deck.new(card_data: card)
+headers = [ "front", "back", "Tags" ]
+cards = [
+          { "front" => "Front of the card", "back" => "Back of the card", "Tags" => "one_tag" },
+          { "front" => "Another card", "back" => "Another answer", "Tags" => "multiple tags are separated by spaces" }
+        ]
+deck = Anki::Deck.new(card_headers: headers, card_data: card)
 deck.generate_deck
-  # => "Front;Back;tag1 tag2"
+  # => "Front of the card;Back of the card;one_tag\nAnother card;Another answer;multiple tags are separated by spaces"
 ```
 
 ## Contributing

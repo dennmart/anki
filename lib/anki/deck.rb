@@ -1,34 +1,38 @@
 # coding: utf-8
 module Anki
   class Deck
-    attr_accessor :card_data
+    attr_accessor :card_headers,:card_data
 
     def initialize(options = {})
+      @card_headers = options.delete(:card_headers)
       @card_data = options.delete(:card_data)
     end
 
     def generate_deck(options = {})
-      raise ArgumentError, "card_data should be an array of hashes" if !self.card_data.is_a?(Array)
-      raise ArgumentError, "You need card data." if self.card_data.empty?
+      raise ArgumentError, "card_headers must be an array" if !self.card_headers.is_a?(Array)
+      raise ArgumentError, "card_headers must not be empty" if self.card_headers.empty?
+      raise ArgumentError, "card_data must be an array" if !self.card_data.is_a?(Array)
+      raise ArgumentError, "card_data must not be empty" if self.card_data.empty?
 
-      anki_string = self.card_data.map { |card| card_data_to_string(card) }.compact.join("\n")
+      anki_string = ""
+      anki_string << card_header_to_string()
+      anki_string << self.card_data.map { |card| card_data_to_string(card) }.compact.join("\n")
       create_file(anki_string, options[:file]) if options[:file]
       anki_string
     end
 
     private
 
-    def card_data_to_string(card)
-      front_card = card.keys.first
-      back_card = card.values.first
+    def card_header_to_string()
+      "#" + self.card_headers.join(";") + "\n"
+    end
 
-      if back_card.is_a?(String)
-        "#{front_card};#{back_card}"
-      elsif back_card.is_a?(Hash)
-        back_card_value = back_card["value"]
-        tags = back_card["tags"].join(" ")
-        "#{front_card};#{back_card_value};#{tags}"
-      end
+    def card_data_to_string(card)
+      raise ArgumentError, "card must be a hash" if !card.is_a?(Hash)
+
+      card.default = ""
+
+      self.card_headers.map{ |header| card[header] }.join(";")
     end
 
     def create_file(str, file)
