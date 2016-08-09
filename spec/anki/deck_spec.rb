@@ -60,6 +60,13 @@ RSpec.describe Anki::Deck do
       expect(subject.generate_deck).to eq("#front;back\na;b\nc;d")
     end
 
+    it "returns a string with the card_headers comment, card_data values separated by a custom delimiter, and new cards by line breaks" do
+      subject.card_headers = headers
+      subject.card_data = cards
+      subject.field_separator = "|"
+      expect(subject.generate_deck).to eq("#front|back\na|b\nc|d")
+    end
+
     it "saves to a file if the file option is passed" do
       subject.card_headers = headers
       subject.card_data = cards

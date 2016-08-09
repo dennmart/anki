@@ -1,11 +1,12 @@
 # coding: utf-8
 module Anki
   class Deck
-    attr_accessor :card_headers,:card_data
+    attr_accessor :card_headers,:card_data,:field_separator
 
     def initialize(options = {})
       @card_headers = options.delete(:card_headers)
       @card_data = options.delete(:card_data)
+      @field_separator = options.delete(:field_separator) || ";"
     end
 
     def generate_deck(options = {})
@@ -24,7 +25,7 @@ module Anki
     private
 
     def card_header_to_string()
-      "#" + self.card_headers.join(";") + "\n"
+      "#" + self.card_headers.join(@field_separator) + "\n"
     end
 
     def card_data_to_string(card)
@@ -32,7 +33,7 @@ module Anki
 
       card.default = ""
 
-      self.card_headers.map{ |header| card[header] }.join(";")
+      self.card_headers.map{ |header| card[header] }.join(@field_separator)
     end
 
     def create_file(str, file)
