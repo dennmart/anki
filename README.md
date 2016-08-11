@@ -58,6 +58,7 @@ deck.generate_deck(file: "/tmp/anki_deck.txt")
 ```
 
 ### Including card tags
+
 Tags are nothing special. Any field can be used as the Tag. When you are importing to Anki set the Field mapping to "Map to Tags" by clicking on the Change button for the field that contains your tags.
 
 ```ruby
@@ -71,6 +72,23 @@ cards = [
 deck = Anki::Deck.new(card_headers: headers, card_data: cards)
 deck.generate_deck
   # => "#front;back;Tags\nFront of the card;Back of the card;one_tag\nAnother card;Another answer;multiple tags are separated by spaces"
+```
+
+### Custom field separators
+
+By default, fields are separated by semicolons when generating a deck. If you want to use a custom field separator, you can add an optional `field_separator` option when generating the deck.
+
+```ruby
+require 'anki'
+
+headers = [ "front", "back", "Tags" ]
+cards = [
+          { "front" => "Front of the card", "back" => "Back of the card", "Tags" => "one_tag" },
+          { "front" => "Another card", "back" => "Another answer", "Tags" => "multiple tags are separated by spaces" }
+        ]
+deck = Anki::Deck.new(card_headers: headers, card_data: cards, field_separator: "|")
+deck.generate_deck
+  # => "#front|back|Tags\nFront of the card|Back of the card|one_tag\nAnother card|Another answer|multiple tags are separated by spaces"
 ```
 
 ## Contributing
