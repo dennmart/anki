@@ -1,7 +1,7 @@
 # Changelog
 
 ## 0.0.4 (August 11, 2016)
-* Custom field separators can be specified when generating a deck (#4)
+* #4: Custom field separators can be specified when generating a deck - Thanks to Bill Robinson (@dseevr)
 
 ## 0.0.3 (February 2, 2015)
 * Card headers must to be set up when generating the deck.
